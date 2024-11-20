@@ -1,0 +1,35 @@
+/* Products Page Styles */
+.product-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.product-card h3 {
+  margin: 10px 0;
+}
+
+.product-card a {
+  text-decoration: none;
+  color: #007BFF;
+}
+
+.product-card a:hover {
+  text-decoration: underline;
+}

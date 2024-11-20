@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Products from './pages/Products';
+import ProductDetails from './pages/ProductDetails';
+import { CartProvider } from './context/CartContext';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import OrderSummary from './pages/OrderSummary';
+import OrderConfirmation from './pages/OrderConfirmaton';
+import ThankYou from './pages/ThankYou';
+import Home from './pages/Home';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <CartProvider>
+    <Router>
+      <Navbar />
+      <Routes>
+      <Route path="/" element={<Home/>} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/cart" element={<Cart/>} />      
+        <Route path="/order-summary" element={<OrderSummary />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/thank-you" element={<ThankYou />} />
+      </Routes>
+    </Router>
+    </CartProvider>
   );
 }
 

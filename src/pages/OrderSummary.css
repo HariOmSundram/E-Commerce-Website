@@ -1,0 +1,40 @@
+.order-summary-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h1, h3 {
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.order-summary-item {
+  margin: 10px 0;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.item-actions {
+  margin-top: 10px;
+}
+
+button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.place-order-btn {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}

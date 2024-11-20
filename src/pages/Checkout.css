@@ -1,0 +1,30 @@
+.view-summary {
+  margin-top: 20px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.view-summary:hover {
+  background-color: #45a049;
+}
+
+.confirm-order {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;  /* Prevent shrinking */
+}
+
+.confirm-order:hover {
+  background-color: #45a049;
+}
