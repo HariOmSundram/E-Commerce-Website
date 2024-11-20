@@ -17,12 +17,12 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-      <Route path="/" element={<Home/>} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/cart" element={<Cart/>} />      
-        <Route path="/order-summary" element={<OrderSummary />} />
-        <Route path="/order-confirmation" element={<OrderConfirmation />} />
-        <Route path="/thank-you" element={<ThankYou />} />
+      <Route path="/" element={<Products />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-confirmation" element={<OrderConfirmation />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/thank-you" element={<ThankYou/>}/>
       </Routes>
     </Router>
     </CartProvider>

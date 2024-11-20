@@ -1,27 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import './Checkout.css';
 
 function Checkout() {
-  const { cart, getTotal, discount, fixedDiscount, freeShipping } = useCart();
+  const { cart, applyDiscount, getFinalTotal } = useCart();
+  const navigate = useNavigate();
   const [discountCode, setDiscountCode] = useState('');
+  const [discountMessage, setDiscountMessage] = useState('');
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+  const [shippingDetails, setShippingDetails] = useState({
+    name: '',
+    address: '',
+  });
+  const [finalTotal, setFinalTotal] = useState(0);
 
+  // Handle discount code apply
   const handleDiscountApply = () => {
-    if (discountCode === 'SAVE10') {
+    const response = applyDiscount(discountCode);
+
+    if (response.success) {
       setIsDiscountApplied(true);
-      alert('Discount Applied: 10% off');
+      setDiscountMessage(response.message);
     } else {
-      alert('Invalid Discount Code');
+      setDiscountMessage(response.message);
+      setIsDiscountApplied(false);
     }
   };
 
-  const calculateFinalTotal = () => {
-    let total = getTotal();
-    if (discount && !isDiscountApplied) total *= (1 - discount);
-    if (fixedDiscount) total -= fixedDiscount;
-    if (isDiscountApplied) total *= 0.9; // 10% discount if applied
-    return total;
+  // Update the final total whenever the discount code, cart, or taxes change
+  useEffect(() => {
+    const { totalAfterTax } = getFinalTotal();
+    setFinalTotal(parseFloat(totalAfterTax).toFixed(2));
+  }, [discountCode, cart, getFinalTotal]); // Re-run whenever discount code, cart, or getFinalTotal changes
+
+  const handleShippingChange = (e) => {
+    const { name, value } = e.target;
+    setShippingDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+
+  const handlePlaceOrder = () => {
+    if (!shippingDetails.name || !shippingDetails.address) {
+      alert('Please fill in all shipping details.');
+      return;
+    }
+
+    // Fetch the final total after discount and taxes
+    const { totalAfterTax, cgst, sgst } = getFinalTotal();
+    const finalTotal = parseFloat(totalAfterTax).toFixed(2);
+
+    // Pass the final total, taxes, and shipping details to the Order Confirmation page
+    navigate('/order-confirmation', {
+      state: { finalTotal, taxes: { cgst, sgst }, shippingDetails },
+    });
   };
 
   return (
@@ -35,25 +69,36 @@ function Checkout() {
             <h3>Order Summary</h3>
             {cart.map((item) => (
               <div key={item.id} className="checkout-item">
-                <p>{item.name} (x{item.quantity}) - ${item.price * item.quantity}</p>
+                <p>
+                  {item.name} (x{item.quantity}) - ₹{(item.price * item.quantity).toFixed(2)}
+                </p>
               </div>
             ))}
-            <p>Total: ${getTotal()}</p>
-            {discount && <p>Discount Applied: {discount * 100}%</p>}
-            {fixedDiscount && <p>Fixed Discount: ${fixedDiscount}</p>}
-            {isDiscountApplied && <p>Discount Code Applied: 10% off</p>}
-            <h3>Final Total: ${calculateFinalTotal()}</h3>
+            {isDiscountApplied && <p>{discountMessage}</p>}
+            <h3>Final Total (Including Taxes): ₹{finalTotal}</h3>
           </div>
 
           <div className="checkout-form">
             <h3>Shipping Details</h3>
             <label>
               Name:
-              <input type="text" />
+              <input
+                type="text"
+                name="name"
+                value={shippingDetails.name}
+                onChange={handleShippingChange}
+                placeholder="Enter your name"
+              />
             </label>
             <label>
               Address:
-              <input type="text" />
+              <input
+                type="text"
+                name="address"
+                value={shippingDetails.address}
+                onChange={handleShippingChange}
+                placeholder="Enter your address"
+              />
             </label>
             <label>
               Discount Code:
@@ -61,12 +106,15 @@ function Checkout() {
                 type="text"
                 value={discountCode}
                 onChange={(e) => setDiscountCode(e.target.value)}
+                placeholder="Enter discount code"
               />
               <button onClick={handleDiscountApply}>Apply</button>
             </label>
           </div>
 
-          <button className="confirm-order">Confirm Order</button>
+          <button className="confirm-order" onClick={handlePlaceOrder}>
+            Place Order
+          </button>
         </div>
       )}
     </div>
